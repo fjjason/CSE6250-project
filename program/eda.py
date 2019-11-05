@@ -23,7 +23,7 @@ def plot_psg(eeg, save_path):
     plt.figure(figsize=[10, 10])
     for i, channel in enumerate(channels):
         plt.subplot(3, 3, i+1)
-        wave = eeg_waveform.iloc[:, i].values.reshape(-1, 10000)
+        wave = eeg_waveform.iloc[:, i].values.reshape(-1, 1000)
         plt.plot(wave.mean(axis=1), color='k')
         plt.title(channel)
         plt.xlabel('time (10s)')
@@ -33,8 +33,8 @@ def plot_psg(eeg, save_path):
 cassete_sample = read_raw_edf('data/sleep-cassette/SC4041E0-PSG.edf')
 plot_psg(cassete_sample, 'plot/SC4041E0-PSG.png')
 
-telemetry_sample = read_raw_edf('data/sleep-telemetry/ST7011J0-PSG.edf')
-plot_psg(telemetry_sample, 'plot/ST7011J0-PSG.png')
+telemetry_sample = read_raw_edf('data/sleep-telemetry/ST7242J0-PSG.edf')
+plot_psg(telemetry_sample, 'plot/ST7242J0-PSG.png')
 # the final drop appears to be outlier
 
 psg_paths = pd.read_table('data/RECORDS', header=None).iloc[:, 0].values

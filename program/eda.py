@@ -5,6 +5,8 @@ import mne
 from mne.io import read_raw_edf
 import os
 import re
+import seaborn as sns
+sns.set()
 
 sample_data = read_raw_edf('data/sleep-cassette/SC4041E0-PSG.edf')
 channel_names = sample_data.info['ch_names']
@@ -21,8 +23,8 @@ def plot_psg(eeg, save_path):
     plt.figure(figsize=[10, 10])
     for i, channel in enumerate(channels):
         plt.subplot(3, 3, i+1)
-        wave = eeg_waveform.iloc[:, i].values.reshape(-1, 1000)
-        plt.plot(wave.mean(axis=1))
+        wave = eeg_waveform.iloc[:, i].values.reshape(-1, 10000)
+        plt.plot(wave.mean(axis=1), color='k')
         plt.title(channel)
         plt.xlabel('time (10s)')
     plt.tight_layout()
@@ -33,7 +35,7 @@ plot_psg(cassete_sample, 'plot/SC4041E0-PSG.png')
 
 telemetry_sample = read_raw_edf('data/sleep-telemetry/ST7011J0-PSG.edf')
 plot_psg(telemetry_sample, 'plot/ST7011J0-PSG.png')
-
+# the final drop appears to be outlier
 
 psg_paths = pd.read_table('data/RECORDS', header=None).iloc[:, 0].values
 

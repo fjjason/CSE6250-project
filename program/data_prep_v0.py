@@ -10,6 +10,7 @@ from scipy.signal import welch
 from scipy.integrate import simps
 from time import time
 import pickle
+import matplotlib.cm as cm
 
 # Reference: https://raphaelvallat.com/bandpower.html
 # Reference: https://stackoverflow.com/questions/44547669/python-numpy-equivalent-of-bandpower-from-matlab
@@ -34,7 +35,7 @@ sf = 100
 
 tic = time()
 for i, path in enumerate(eeg_info_df.path.values):
-    raw_edf = read_raw_edf(os.path.join('data', eeg_info_df.path.iloc[0]))
+    raw_edf = read_raw_edf(os.path.join('data', eeg_info_df.path.iloc[i]))
     edf_df = raw_edf.to_data_frame()
 
     features = [ bandpower(edf_df[channel].values, sf, frequency_bands[band]) for channel in shared_channels for band in band_names]

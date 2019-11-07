@@ -16,6 +16,7 @@ dependencies:
   - scipy
   - pandas
   - matplotlib==3.1.0
+  - nb_conda_kernels
   - pytest
   - pip
   - pip:

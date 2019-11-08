@@ -5,3 +5,6 @@ data
 .Rproj.user
 .Rhistory
 .idea
+
+.env.local
+notebooks/**/.ipynb_checkpoints

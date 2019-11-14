@@ -17,13 +17,17 @@ eeg_waveform = sample_data.to_data_frame()
 wave1 = eeg_waveform.iloc[:, 0].values.reshape(-1, 10000)
 pd.Series(wave1.mean(axis=1)).plot()
 
-def plot_psg(eeg, save_path):
+def plot_psg(eeg, save_path, thresholds=None):
     eeg_waveform = eeg.to_data_frame()
     channels = eeg_waveform.columns
     plt.figure(figsize=[10, 10])
     for i, channel in enumerate(channels):
         plt.subplot(3, 3, i+1)
-        wave = eeg_waveform.iloc[:, i].values.reshape(-1, 1000)
+        temp = eeg_waveform.iloc[:, i].values
+        if thresholds is not None:
+            temp = temp[(temp>thresholds[0]) & (temp<thresholds[1])]
+            temp = temp[:temp.shape[0]//1000*1000]
+        wave = temp.reshape(-1, 1000)
         plt.plot(wave.mean(axis=1), color='k')
         plt.title(channel)
         plt.xlabel('time (10s)')
@@ -36,6 +40,10 @@ plot_psg(cassete_sample, 'plot/SC4041E0-PSG.png')
 telemetry_sample = read_raw_edf('data/sleep-telemetry/ST7242J0-PSG.edf')
 plot_psg(telemetry_sample, 'plot/ST7242J0-PSG.png')
 # the final drop appears to be outlier
+
+telemetry_sample = read_raw_edf('data/sleep-telemetry/ST7242J0-PSG.edf')
+plot_psg(telemetry_sample, 'plot/ST7242J0-PSG_v1.png', thresholds=[-100, 100])
+
 
 psg_paths = pd.read_table('data/RECORDS', header=None).iloc[:, 0].values
 

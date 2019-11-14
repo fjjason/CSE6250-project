@@ -16,7 +16,7 @@ from sklearn.metrics import roc_curve
 from sklearn.metrics import average_precision_score
 from sklearn.metrics import precision_recall_curve
 
-X, y = pickle.load(open('data/model_data_v1.sav', 'rb'))
+X, y, _ = pickle.load(open('data/model_data_v1.sav', 'rb'))
 
 plt.figure(figsize=[10, 10])
 plt.subplot(2,2,1)
@@ -69,7 +69,7 @@ for i, model in enumerate(models):
 
 eval_metrics
 #                      Accuracy   ROC AUC    PR AUC  Log Loss
-# baseline             0.904085  0.500000  0.095915  0.693147
-# Logistic Regression  0.949378  0.940888  0.730949  0.204629
-# Random Forest        0.949378  0.926094  0.741752  0.384325
-# LightGBM             0.968028  0.969289  0.881310  0.213642
+# baseline             0.917333  0.500000  0.082667  0.693147
+# Logistic Regression  0.939556  0.956989  0.710311  0.151179
+# Random Forest        0.956444  0.954426  0.721023  0.230799
+# LightGBM             0.972444  0.986309  0.902628  0.127968

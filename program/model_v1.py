@@ -73,3 +73,7 @@ eval_metrics
 # Logistic Regression  0.939556  0.956989  0.710311  0.151179
 # Random Forest        0.956444  0.954426  0.721023  0.230799
 # LightGBM             0.972444  0.986309  0.902628  0.127968
+
+confusion_matrix(y_test, pred)
+# array([[1017,   15],
+#        [  16,   77]])

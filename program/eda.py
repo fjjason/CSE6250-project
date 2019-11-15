@@ -70,3 +70,30 @@ channels0 = eeg_info_df.channels.values[0]
 channels1 = eeg_info_df.channels.values[-1]
 [i for i in channels1 if i in channels0]
 # ['EEG Fpz-Cz', 'EEG Pz-Oz', 'EOG horizontal', 'EMG submental']
+
+
+shared_channels = ['EEG Fpz-Cz', 'EEG Pz-Oz', 'EOG horizontal', 'EMG submental']
+cassete_sample = read_raw_edf('data/sleep-cassette/SC4041E0-PSG.edf')
+telemetry_sample = read_raw_edf('data/sleep-telemetry/ST7242J0-PSG.edf')
+
+plt.figure(figsize=[25, 10])
+eeg_waveform = cassete_sample.to_data_frame()
+for i, channel in enumerate(shared_channels):
+    plt.subplot(2, 4, i+1)
+    temp = eeg_waveform[channel].values
+    temp = temp[(temp>-1000) & (temp<1000)]
+    temp = temp[:temp.shape[0]//1000*1000]
+    wave = temp.reshape(-1, 1000)
+    plt.plot(wave.mean(axis=1), color='k')
+    plt.title(channel)
+
+eeg_waveform = telemetry_sample.to_data_frame()
+for i, channel in enumerate(shared_channels):
+    plt.subplot(2, 4, i+5)
+    temp = eeg_waveform[channel].values
+    temp = temp[(temp>-1000) & (temp<1000)]
+    temp = temp[:temp.shape[0]//1000*1000]
+    wave = temp.reshape(-1, 1000)
+    plt.plot(wave.mean(axis=1), color='k')
+plt.tight_layout()
+plt.savefig('plot/sample.png')

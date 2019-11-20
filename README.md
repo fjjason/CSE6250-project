@@ -6,42 +6,25 @@ This is the repository for 2019 Fall CSE6250 project.
 
 Generate Plots & CSV of Channels and Labels
 
-> `python program/eda.py`
+`python program/eda.py`
 
 Transform Data
 
-> `python program/data_prep_v0.py`
+`python program/data_prep_v1.py`
 
 Train Model
 
-> `python program/model_v0.py`
+`python program/model_v1.py`
 
 # Description of Parameters & Labels
 
-...
+16 features are computed. Each feature represents the bandpower of bands present in the patient's electrical channels. Each feature is computed for each band over a 1 hour interval over each channel.
 
-# Conda
+Labels represent whether the channel sample indicates poor sleep. Label of 1 if the patient had a mild difficulty of falling asleep, otherwise the label is 0. These labels correspond to a set of 16 bandpower features mentioned.
 
-## tldr;
+# Conda Environment
 
-> `conda env create -f environment.yml`
-
-> `conda activate cse6250-project-sleep`
-
-## setup steps:
-
-environment originally created via:
-
-> `conda create --name cse6250-project-sleep`
-
-activate the new environment:
-
-> `conda activate cse6250-project-sleep`
-
-copied a base environment.yml and then installed packages individually:
-
-> `conda install <package>`
-
-now, environment can be installed from `environment.yml` via
-
-> `conda env create -f environment.yml`
+```
+conda env create -f environment.yml
+conda activate cse6250-project-sleep
+```

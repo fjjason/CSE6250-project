@@ -17,24 +17,28 @@ from sklearn.metrics import average_precision_score
 from sklearn.metrics import precision_recall_curve
 import seaborn as sns
 
-X, y = pickle.load(open('data/model_data_v0.sav', 'rb'))
 
-plt.figure(figsize=[10, 10])
-plt.subplot(2, 2, 1)
-sns.scatterplot(x=0, y=1, hue='y', data=df)
-plt.subplot(2, 2, 2)
-sns.scatterplot(x=4, y=5, hue='y', data=df)
-plt.subplot(2, 2, 3)
-sns.scatterplot(x=8, y=9, hue='y', data=df)
-plt.subplot(2, 2, 4)
-sns.scatterplot(x=12, y=13, hue='y', data=df)
-plt.show()
+def show_plots(df):
+    plt.figure(figsize=[10, 10])
+    plt.subplot(2, 2, 1)
+    sns.scatterplot(x=0, y=1, hue='y', data=df)
+    plt.subplot(2, 2, 2)
+    sns.scatterplot(x=4, y=5, hue='y', data=df)
+    plt.subplot(2, 2, 3)
+    sns.scatterplot(x=8, y=9, hue='y', data=df)
+    plt.subplot(2, 2, 4)
+    sns.scatterplot(x=12, y=13, hue='y', data=df)
+    plt.show()
+
+
+X, y = pickle.load(open('data/model_data_v0.sav', 'rb'))
 
 X = X[:, :12]
 df = pd.DataFrame(X)
 df['y'] = y
 df.to_csv('data/model_data.csv', index=False)
 
+show_plots(df)
 
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.3, random_state=1)

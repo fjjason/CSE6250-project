@@ -17,6 +17,7 @@ eeg_waveform = sample_data.to_data_frame()
 wave1 = eeg_waveform.iloc[:, 0].values.reshape(-1, 10000)
 pd.Series(wave1.mean(axis=1)).plot()
 
+
 def plot_psg(eeg, save_path, thresholds=None):
     eeg_waveform = eeg.to_data_frame()
     channels = eeg_waveform.columns
@@ -25,7 +26,7 @@ def plot_psg(eeg, save_path, thresholds=None):
         plt.subplot(3, 3, i+1)
         temp = eeg_waveform.iloc[:, i].values
         if thresholds is not None:
-            temp = temp[(temp>thresholds[0]) & (temp<thresholds[1])]
+            temp = temp[(temp > thresholds[0]) & (temp < thresholds[1])]
             temp = temp[:temp.shape[0]//1000*1000]
         wave = temp.reshape(-1, 1000)
         plt.plot(wave.mean(axis=1), color='k')
@@ -33,6 +34,7 @@ def plot_psg(eeg, save_path, thresholds=None):
         plt.xlabel('time (10s)')
     plt.tight_layout()
     plt.savefig(save_path)
+
 
 cassete_sample = read_raw_edf('data/sleep-cassette/SC4041E0-PSG.edf')
 plot_psg(cassete_sample, 'plot/SC4041E0-PSG.png')
@@ -45,19 +47,24 @@ telemetry_sample = read_raw_edf('data/sleep-telemetry/ST7242J0-PSG.edf')
 plot_psg(telemetry_sample, 'plot/ST7242J0-PSG_v1.png', thresholds=[-100, 100])
 
 
-psg_paths = pd.read_table('data/RECORDS', header=None).iloc[:, 0].values
+def read_eeg_info_list(base_path):
+    psg_paths = pd.read_table(base_path, header=None).iloc[:, 0].values
+    eeg_info_list = []
+    for psg_path in psg_paths:
+        raw_edf = read_raw_edf(os.path.join('data', psg_path))
+        edf_df = raw_edf.to_data_frame()
+        eeg_info_list.append(
+            [psg_path, edf_df.columns.tolist(), edf_df.shape[0]])
+    return eeg_info_list
 
-eeg_info_list = []
-for psg_path in psg_paths:
-    raw_edf = read_raw_edf(os.path.join('data', psg_path))
-    edf_df = raw_edf.to_data_frame()
-    eeg_info_list.append([psg_path, edf_df.columns.tolist(), edf_df.shape[0]])
 
-eeg_info_df = pd.DataFrame.from_records(eeg_info_list, columns=['path', 'channels', 'n_records'])
+eeg_info_df = pd.DataFrame.from_records(
+    read_eeg_info_list('data/RECORDS'), columns=['path', 'channels', 'n_records'])
 eeg_info_df.to_csv('data/eeg_info_df.csv', index=False)
 
 eeg_info_df['n_channels'] = eeg_info_df.channels.map(len)
-eeg_info_df['label'] = np.where(eeg_info_df.path.map(lambda x: x.split('/')[0])=='sleep-telemetry', 1, 0)
+eeg_info_df['label'] = np.where(eeg_info_df.path.map(
+    lambda x: x.split('/')[0]) == 'sleep-telemetry', 1, 0)
 eeg_info_df['label'].value_counts()
 # 0    153
 # 1     44
